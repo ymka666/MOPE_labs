@@ -30,6 +30,7 @@ for i in range(len(all_x)):
 x0_1 = (max(all_x1)+min(all_x1))/2
 x0_2 = (max(all_x2)+min(all_x2))/2
 x0_3 = (max(all_x3)+min(all_x3))/2
+y_et = a0+a1*x0_1+a2*x0_2+a3*x0_3
 
 dx_1 = x0_1-min(all_x1)
 dx_2 = x0_2-min(all_x2)
@@ -45,7 +46,7 @@ for i in range(len(all_x)):
 min_y = min(all_y)
 
 data_main = [['', 'X1', 'X2', 'X3', 'Y', '', 'Xн1', 'Xн2', 'Xн3', '', 'min(Y)'],
-             [1]+[i for i in all_x[0]]+[all_y[0]]+['']+[x_n1[0], x_n2[0], x_n3[0]]+['', min_y],
+             [1]+[i for i in all_x[0]]+[all_y[0]]+[y_et]+[x_n1[0], x_n2[0], x_n3[0]]+['', min_y],
              [2]+[i for i in all_x[1]]+[all_y[1]]+['']+[x_n1[1], x_n2[1], x_n3[1]]+['', ''],
             [3]+[i for i in all_x[2]]+[all_y[2]]+['']+[x_n1[2], x_n2[2], x_n3[2]]+['', ''],
             [4]+[i for i in all_x[3]]+[all_y[3]]+['']+[x_n1[3], x_n2[3], x_n3[3]]+['', ''],
