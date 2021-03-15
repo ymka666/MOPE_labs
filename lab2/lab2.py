@@ -39,7 +39,7 @@ aij = [sum([x1_x2[j][i] * y_average[i] for i in range(3)]) / 3 for j in range(2)
 first = numpy.array([[1, m_x1, m_x2], [m_x1, a[0], a[1]], [m_x2, a[1], a[2]]])
 second = numpy.array([my, aij[0], aij[1]])
 result = numpy.linalg.solve(first, second)
-
+#5 завдання. Підставляю дані у отримане нормоване рівняння регресії для перевірки (роблю це генератором) виводжу(92) і доводжу, що співпадають з середніми значеннями ф. відгуку 
 revision = [result[0] + result[1]*x1_x2[0][i] + result[2]*x1_x2[1][i] for i in range(len(result))]
 
 delta_x1 = abs(x1_max-x1_min)/2
