@@ -142,7 +142,7 @@ class Window:
             self.criterionStudent()
         else:
             print("GP = {0:.4f} > GT = {1} - Дисперсія неоднорідна! Змінимо M на M=M+1".format(self.GP, self.GT))
-            self.M = self.M + 1
+            self.m = self.m + 1
             self.__init__()
 
     def criterionStudent(self):
