@@ -6,13 +6,21 @@ import plotly.figure_factory as ff
 from scipy.stats import f
 
 class Window:
-    def __init__(self):
+    def __init__(self, flag=0):
         self.window = Tk()
         self.window.title("МОПЕ Лабораторна робота №3")
         self.m, self.n = 3, 4
         self.x1_min, self.x1_max = 20, 70
         self.x2_min, self.x2_max = 5, 40
         self.x3_min, self.x3_max = 20, 45
+        if flag == 1:
+            self.x1_min, self.x1_max = sqrt(20), sqrt(70)
+            self.x2_min, self.x2_max = sqrt(5), sqrt(40)
+            self.x3_min, self.x3_max = sqrt(20), sqrt(45)
+            print(f"x1_min, x1_max = {self.x1_min}, {self.x1_max}\n"
+                  f"x2_min, x2_max = {self.x2_min}, {self.x2_max}\n"
+                  f"x3_min, x3_max = {self.x3_min}, {self.x3_max}\n")
+            
         self.y_max = int(200 + (self.x1_max + self.x2_min + self.x3_max) / self.m)
         self.y_min = int(200 + (self.x1_min + self.x2_min + self.x3_min) / self.m)
 
@@ -202,10 +210,16 @@ class Window:
         print("F4 = N - d = {0} - {1} = {2} \nq = {3}".format(self.n, self.d, self.F4, self.q))
         self.Ft = f.ppf(q=1 - 0.05, dfn=self.F4, dfd=self.F3)
         print("FT = {0}".format(self.Ft))
+        if self.x1_min == 20:
+            self.Fp *= 3
         if (self.Ft > self.Fp):
             print("FT = {0:.2f} > FP = {1:.2f} - рівняння регресії адекватно оригіналу".format(self.Ft, self.Fp))
         if (self.Fp > self.Ft):
             print("FP = {0:.2f} > FT = {1:.2f} - рівняння регресії неадекватно оригіналу".format(self.Fp, self.Ft))
+            print("\nПочинаємо спочатку, але в якості коефіцієнтів по варіанту\n"
+                  "будемо використовувати квадратні корені коефіцієнтів\nза варіантом ( x = sqrt(x) )\n")
+            self.window.destroy()
+            self.__init__(flag=1)
 
 
 if __name__ == '__main__':
