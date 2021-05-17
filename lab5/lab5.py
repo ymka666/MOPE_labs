@@ -4,7 +4,7 @@ from scipy.stats import f, t
 from functools import partial
 from pyDOE2 import *
 import plotly.figure_factory as ff
-
+import time
 
 def regression(x, b):
     y = sum([x[i] * b[i] for i in range(len(x))])
@@ -99,6 +99,7 @@ def plan_matrix5(n, m):
 
 
 def find_coef(X, Y, norm=False):
+    start_time = time.time()
     skm = lm.LinearRegression(fit_intercept=False)
     skm.fit(X, Y)
     B = skm.coef_
@@ -108,6 +109,7 @@ def find_coef(X, Y, norm=False):
         print('\nКоефіцієнти рівняння регресії:')
     B = [round(i, 3) for i in B]
     print(B)
+    print('Час пошуку: ', time.time() - start_time)
     print('\nРезультат рівняння зі знайденими коефіцієнтами:\n', np.dot(X, B))
     return B
 
