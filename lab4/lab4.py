@@ -114,8 +114,8 @@ class Window:
             y_table = [[randint(self.y_min, self.y_max) for _ in range(self.m)] for j in range(self.n)]
         self.norm_factors_table_zero_factor = [[+1] + i for i in self.norm_factor_table]
         self.importance = self.student_criteria(self.m, self.n, self.y_arr, self.norm_factors_table_zero_factor)
-
-        self.fisher_criteria(self.m, self.n, 1, self.var_factor_table, self.y_arr, self.natural_bi, self.importance)
+        if self.importance != False:
+            self.fisher_criteria(self.m, self.n, 1, self.var_factor_table, self.y_arr, self.natural_bi, self.importance)
         self.window.mainloop()
 
 
@@ -175,13 +175,17 @@ class Window:
         beta_i = ["β0", "β1", "β2", "β3", "β12", "β13", "β23", "β123"]
         importance_to_print = ["важливий" if i else "неважливий" for i in importance]
         to_print = map(lambda x: x[0] + " " + x[1], zip(beta_i, importance_to_print))
-        x_i_names = list(compress(["", "X1", "X2", "X3", "X12", "X13", "X23", "X123"], importance))
-        betas_to_print = list(compress(coefficients_beta_s, importance))
-        print(*to_print, sep="; ")
-        equation = " ".join(
-            ["".join(i) for i in zip(list(map(lambda x: "{:+.2f}".format(x), betas_to_print)), x_i_names)])
-        print("Рівняння регресії без незначимих членів: y = " + equation)
-        return importance
+        if importance.count(True) == 3:
+            print('\nКількість значимих коефіцієнтів = 3 (вважаємо, що модель не адекватна).\n')
+            return False
+        else:
+            x_i_names = list(compress(["", "X1", "X2", "X3", "X12", "X13", "X23", "X123"], importance))
+            betas_to_print = list(compress(coefficients_beta_s, importance))
+            print(*to_print, sep="; ")
+            equation = " ".join(
+                ["".join(i) for i in zip(list(map(lambda x: "{:+.2f}".format(x), betas_to_print)), x_i_names)])
+            print("Рівняння регресії без незначимих членів: y = " + equation)
+            return importance
 
     def calculate_theoretical_y(self, x_table, b_coefficients, importance):
         x_table = [list(compress(row, importance)) for row in x_table]
