@@ -144,7 +144,12 @@ def student_criteria(m, N, y_table, beta_coefficients):
     q = 0.05
     t_our = get_student_value(f3, q)
     importance = [True if el > t_our else False for el in list(t_i)]
-
+    global count_true
+    global count_false
+    for i in importance:
+        if i == True:
+            count_true += 1
+        else: count_false += 1
     print("Оцінки коефіцієнтів βs: " + ", ".join(list(map(lambda x: str(round(float(x), 3)), beta_coefficients))))
     print("Коефіцієнти ts: " + ", ".join(list(map(lambda i: "{:.2f}".format(i), t_i))))
     print("f3 = {}; q = {}; tтабл = {}".format(f3, q, t_our))
@@ -179,18 +184,25 @@ def fisher_criteria(m, N, d, x_table, y_table, b_coefficients, importance):
     print("Fp < Ft => модель адекватна" if f_p < f_t else "Fp > Ft => модель неадекватна")
     return True if f_p < f_t else False
 
+global count_true, count_false
+count_true = 0
+count_false = 0
 
-m = 3
-N = 15
-natural_plan = generate_factors_table(natur_plan_raw)
-y_arr = generate_y(m, natur_plan_raw)
-while not cochran_criteria(m, N, y_arr):
-    m += 1
-    y_arr = generate_y(m, natural_plan)
+for i in range(100):
+    m = 3
+    N = 15
+    natural_plan = generate_factors_table(natur_plan_raw)
+    y_arr = generate_y(m, natur_plan_raw)
+    while not cochran_criteria(m, N, y_arr):
+        m += 1
+        y_arr = generate_y(m, natural_plan)
 
-print_matrix(m, N, natural_plan, y_arr, " для натуралізованих факторів:")
-coefficients = find_coefficients(natural_plan, y_arr)
-print_equation(coefficients)
-importance = student_criteria(m, N, y_arr, coefficients)
-d = len(list(filter(None, importance)))
-fisher_criteria(m, N, d, natural_plan, y_arr, coefficients, importance)
+    print_matrix(m, N, natural_plan, y_arr, " для натуралізованих факторів:")
+    coefficients = find_coefficients(natural_plan, y_arr)
+    print_equation(coefficients)
+    importance = student_criteria(m, N, y_arr, coefficients)
+    d = len(list(filter(None, importance)))
+    fisher_criteria(m, N, d, natural_plan, y_arr, coefficients, importance)
+
+print('Кількість коеф. з ефектом взаємодії: ', count_true)
+print('Кількість коеф. без ефекта взаємодії: ', count_false)
